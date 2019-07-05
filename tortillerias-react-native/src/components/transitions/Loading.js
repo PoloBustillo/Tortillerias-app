@@ -8,25 +8,46 @@ import {
   Animated,
   Easing,
   Button,
-  DividerVertical
+  DividerVertical,
+  ActivityIndicator,
+  Image
 } from 'react-native';
 import logo from '../../logo.png';
 
+
 class Loading extends React.Component {
-  state = {
-    spinValue: new Animated.Value(1),
+
+  constructor(props){
+    super(props);
+    this.state = {
+      spinValue: new Animated.Value(1),
+      count: 0,
+      showText:''
+    }
+    Animated.loop(Animated.timing(
+      this.state.spinValue,
+      {
+        toValue: 1000,
+        duration: 1000,
+        easing: Easing.linear
+      }
+    )).start()
+    setInterval(() => {
+      const text = 'Loading...';
+      if(this.state.count === text.length+1)
+      {
+        this.setState({count: 0})
+      }
+      this.setState({count: this.state.count+1,
+      showText: text.substring(0,this.state.count)})
+
+    }, 400);
   }
+
 
   onClick = () => {
     const wasRotated = this.state.spinValue._value === 1;
-    Animated.timing(
-      this.state.spinValue,
-      {
-        toValue: wasRotated ? 0 : 1,
-        duration: 250,
-        easing: Easing.linear
-      }
-    ).start()
+
   }
 
   render(){
@@ -40,13 +61,8 @@ class Loading extends React.Component {
       <View style={styles.container}>
           <Animated.Image source={logo} style={[styles.logo, { transform: [{rotate: spin}] }]}/>
 
-          <TouchableHighlight
-            onPress={this.onClick}
-            style={styles.button}
-            underlayColor={'#0A84D0'}
-          >
-                <Text>Button</Text>
-          </TouchableHighlight>
+          <Image source={require('../../loadingCorgi.gif')} />
+          <Text style={styles.text}>{this.state.showText}</Text>
       </View>
     );
 
@@ -56,14 +72,18 @@ class Loading extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#e5c17f',
+    backgroundColor: '#ff5a36',
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
   logo: {
-    width: 200,
-    height: 200,
+    width: 120,
+    height: 120,
+  },
+  text: {
+    color: 'white',
+    fontSize: 40,
   }
 });
 

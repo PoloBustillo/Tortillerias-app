@@ -1,20 +1,25 @@
 import React, { Component } from 'react';
-import Loading from './components/transitions/Loading'
+import Loading from './components/transitions/Loading';
+import SignUp from './components/Signup';
 import {Platform, View} from 'react-native';
+import {
+  createSwitchNavigator,
+  createStackNavigator,
+  createAppContainer
+} from 'react-navigation';
 
-class App extends Component {
-
-  render() {
-
-
-    return (
-      <View>
-        <Loading/>
-      </View>
-    );
+// create our app's navigation stack
+const RootStack = createSwitchNavigator(
+  {
+    Loading: Loading,
+    SignUp: SignUp,
+  },
+  {
+    initialRouteName: 'Loading'
   }
-}
+)
 
+const App = createAppContainer(RootStack);
 
 let hotWrapper = () => () => App;
 if (Platform.OS === 'web') {
