@@ -13,7 +13,7 @@ import {
   Image
 } from 'react-native';
 import logo from '../../logo.png';
-
+import firebase from 'react-native-firebase'
 
 class Loading extends React.Component {
 
